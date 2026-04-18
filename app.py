@@ -265,6 +265,89 @@ html, body, [data-testid="stAppViewContainer"] {
 </style>
 """, unsafe_allow_html=True)
 
+# ==========================================
+# APP ROUTING & MEMORY (st.session_state)
+# ==========================================
+# 1. Give the app a memory of where the user is
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "semester" # Start at the first page
+if "semester" not in st.session_state:
+    st.session_state.semester = None
+if "stream" not in st.session_state:
+    st.session_state.stream = None
+if "roll_number" not in st.session_state:
+    st.session_state.roll_number = None
+
+# ==========================================
+# PAGE 1: SEMESTER SELECTION
+# ==========================================
+if st.session_state.current_page == "semester":
+    st.markdown("<h1 style='text-align: center; font-family: DM Serif Display;'>Welcome to Zenith ✦</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #6B6560;'>Select your current semester to begin.</p>", unsafe_allow_html=True)
+    
+    st.write("") # Spacer
+    
+    # Creates a nice 4x2 grid of buttons
+    col1, col2, col3, col4 = st.columns(4)
+    cols = [col1, col2, col3, col4]
+    
+    for i in range(1, 9):
+        # Place the button in the correct column
+        with cols[(i-1) % 4]:
+            if st.button(f"Semester {i}", use_container_width=True):
+                st.session_state.semester = i
+                st.session_state.current_page = "stream" # Move to next page
+                st.rerun() # Force the app to refresh and load Page 2
+
+# ==========================================
+# PAGE 2: STREAM SELECTION
+# ==========================================
+elif st.session_state.current_page == "stream":
+    st.markdown(f"<h2 style='text-align: center;'>Semester {st.session_state.semester} Confirmed.</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #6B6560;'>Now, select your engineering stream.</p>", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    streams = ["CSE", "IT", "ECE", "EEE", "Mechanical", "Civil"]
+    
+    for idx, stream in enumerate(streams):
+        with [col1, col2, col3][idx % 3]:
+            if st.button(stream, use_container_width=True):
+                st.session_state.stream = stream
+                st.session_state.current_page = "login" # Move to next page
+                st.rerun()
+
+# ==========================================
+# PAGE 3: STUDENT LOGIN
+# ==========================================
+elif st.session_state.current_page == "login":
+    st.markdown(f"<h2 style='text-align: center;'>{st.session_state.stream} Department Login</h2>", unsafe_allow_html=True)
+    
+    # Create a nice centered box for the login form
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        with st.container(border=True):
+            roll_input = st.text_input("College Roll Number")
+            password_input = st.text_input("Password", type="password")
+            
+            if st.button("Access Dashboard ✨", use_container_width=True):
+                if roll_input: # Basic check to make sure they typed something
+                    st.session_state.roll_number = roll_input
+                    st.session_state.current_page = "dashboard" # UNLOCK THE APP!
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid Roll Number.")
+
+# ==========================================
+# PAGE 4: THE ACTUAL ZENITH DASHBOARD
+# ==========================================
+elif st.session_state.current_page == "dashboard":
+    
+    # ---> 🚨 PASTE ALL OF YOUR CLAUDE DASHBOARD CODE HERE! <---
+    # From the TOOLS definition all the way down to the AI connection.
+    # Just make sure everything is indented one level to the right so it sits inside this 'elif' block!
+    
+    pass # Remove this 'pass' once you paste your code!
+
 # ── Tool definitions (Descriptions Only) ──────────────────────────────────
 TOOLS = {
     "💬 General Chat": "Open-ended AI assistant for any CS topic.",
