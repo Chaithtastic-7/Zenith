@@ -1,3 +1,8 @@
+import warnings
+warnings.filterwarnings("ignore")
+
+import os
+from google import genai
 import os
 from google import genai
 from dotenv import load_dotenv
