@@ -13,7 +13,7 @@ client = genai.Client(api_key=api_key)
 def get_ai_response(prompt):
     # Using the much older and faster Gemini 1.58b Flash model! for quick responses. For more complex tasks, we can switch to the 8b or 16b models.
     response = client.models.generate_content(
-        model='gemini-1.5-flash-8b',
+        model='gemini-2.5-flash',
         contents=prompt
     )
     return response.text
