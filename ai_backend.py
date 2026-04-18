@@ -13,9 +13,9 @@ client = genai.Client(api_key=api_key)
 def get_ai_response(prompt):
     # Using the much newer and faster Gemini 2.0 Flash model!
     response = client.models.generate_content(
-        model='gemini-2.0-flash',
-        contents=prompt
-    )
+    model='gemini-1.5-flash',
+    contents=prompt
+)
     return response.text
 
 # 4. A quick test to make sure it works!
