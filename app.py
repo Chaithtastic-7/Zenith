@@ -307,7 +307,7 @@ elif st.session_state.current_page == "stream":
     st.markdown("<p style='text-align: center; color: #6B6560;'>Now, select your engineering stream.</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
-    streams = ["CSE", "IT", "ECE", "EEE", "Mechanical", "Civil"]
+    streams = ["CSE", "AI&ML", "ECE", "EEE", "IT", "CME", "AI&DS", "MBA"]
     
     for idx, stream in enumerate(streams):
         with [col1, col2, col3][idx % 3]:
