@@ -529,7 +529,7 @@ elif st.session_state.current_page == "dashboard":
             mydb = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="Zenith@123", 
+                password="zenith@123", 
                 database="zenith"
             )
             mycursor = mydb.cursor()
