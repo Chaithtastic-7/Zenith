@@ -517,6 +517,25 @@ elif st.session_state.current_page == "dashboard":
         "⚡ TL;DR Summarizer":   "Paste a topic or paragraph to summarise…",
         "🔮 Question Predictor": "Enter a chapter or topic name…",
     }
+    # ==========================================
+    # PDF UPLOAD ZONE (Only shows for "Chat with Notes")
+    # ==========================================
+    if selected_tool == "📝 Chat with Notes":
+        st.markdown("### 📚 Document Scanner")
+        uploaded_file = st.file_uploader("Upload your Syllabus or Class Notes (PDF)", type=["pdf"])
+        
+        if uploaded_file is not None:
+            with st.spinner("Zenith is reading your document..."):
+                # Read the PDF and extract the text
+                pdf_reader = PyPDF2.PdfReader(uploaded_file)
+                extracted_text = ""
+                for page in pdf_reader.pages:
+                    if page.extract_text():
+                        extracted_text += page.extract_text()
+                
+                # Save the text into Zenith's memory!
+                st.session_state.pdf_memory = extracted_text
+                st.success("Document memorized! Ask me anything about it.")
 
     if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here...")):
 
