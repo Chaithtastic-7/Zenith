@@ -322,20 +322,25 @@ elif st.session_state.current_page == "stream":
 elif st.session_state.current_page == "login":
     st.markdown(f"<h2 style='text-align: center;'>{st.session_state.stream} Department Login</h2>", unsafe_allow_html=True)
     
-    # Create a nice centered box for the login form
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.container(border=True):
-            roll_input = st.text_input("College Roll Number")
-            password_input = st.text_input("Password", type="password")
             
-            if st.button("Access Dashboard ✨", use_container_width=True):
-                if roll_input: # Basic check to make sure they typed something
-                    st.session_state.roll_number = roll_input
-                    st.session_state.current_page = "dashboard" # UNLOCK THE APP!
-                    st.rerun()
-                else:
-                    st.error("Please enter a valid Roll Number.")
+            # ---> 🚨 THE FIX: Wrap it in a form! <---
+            with st.form("login_form"):
+                roll_input = st.text_input("College Roll Number")
+                password_input = st.text_input("Password", type="password")
+                
+                # Note: st.button becomes st.form_submit_button inside a form!
+                submitted = st.form_submit_button("Access Dashboard ✨", use_container_width=True)
+                
+                if submitted:
+                    if roll_input and password_input: # Now it checks for both!
+                        st.session_state.roll_number = roll_input
+                        st.session_state.current_page = "dashboard" 
+                        st.rerun()
+                    else:
+                        st.error("Please enter both Roll Number and Password.")
 
 # ==========================================
 # PAGE 4: THE ACTUAL ZENITH DASHBOARD
