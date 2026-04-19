@@ -307,18 +307,19 @@ elif st.session_state.current_page == "stream":
     st.markdown(f"<h2 style='text-align: center;'>Semester {st.session_state.semester} Confirmed.</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #6B6560;'>Now, select your engineering stream.</p>", unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns(3)
+    # Updated to a 4-column grid to fit your new departments nicely!
+    col1, col2, col3, col4 = st.columns(4)
     streams = ["CSE", "AI&ML", "ECE", "EEE", "IT", "CME", "AI&DS", "MBA"]
     
     for idx, stream in enumerate(streams):
-        with [col1, col2, col3][idx % 3]:
+        with [col1, col2, col3, col4][idx % 4]:
             if st.button(stream, use_container_width=True):
                 st.session_state.stream = stream
-                st.session_state.current_page = "login" # Move to next page
+                st.session_state.current_page = "login"
                 st.rerun()
 
 # ==========================================
-# PAGE 3: STUDENT LOGIN
+# PAGE 3: STUDENT LOGIN & VALIDATION
 # ==========================================
 elif st.session_state.current_page == "login":
     st.markdown(f"<h2 style='text-align: center;'>{st.session_state.stream} Department Login</h2>", unsafe_allow_html=True)
@@ -326,20 +327,55 @@ elif st.session_state.current_page == "login":
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.container(border=True):
-            
-            # ---> 🚨 THE FIX: Wrap it in a form! <---
             with st.form("login_form"):
-                roll_input = st.text_input("College Roll Number")
+                roll_input = st.text_input("College Roll Number (e.g., 160625733128)")
                 password_input = st.text_input("Password", type="password")
                 
-                # Note: st.button becomes st.form_submit_button inside a form!
                 submitted = st.form_submit_button("Access Dashboard ✨", use_container_width=True)
                 
                 if submitted:
-                    if roll_input and password_input: # Now it checks for both!
-                        st.session_state.roll_number = roll_input
-                        st.session_state.current_page = "dashboard" 
-                        st.rerun()
+                    if roll_input and password_input:
+                        
+                        roll_clean = roll_input.strip() # Removes accidental spaces
+                        
+                        # 1. Map your college's secret department codes
+                        DEPT_CODES = {
+                            "CSE": "733",
+                            "IT": "737",
+                            "ECE": "735",
+                            "EEE": "734",
+                            "AI & ML": "748",
+                            "MBA": "672"
+                            # Note: AI & DS and CME will bypass the check until we get their codes!
+                        }
+                        
+                        # 2. Format Validation (Must be 12 digits, starts with 1606)
+                        if len(roll_clean) == 12 and roll_clean.startswith("1606"):
+                            
+                            # 3. Python String Slicing!
+                            batch_year = roll_clean[4:6]  # Grabs digits 5 and 6 (e.g., "25")
+                            dept_code = roll_clean[6:9]   # Grabs digits 7, 8, 9 (e.g., "733")
+                            
+                            expected_code = DEPT_CODES.get(str(st.session_state.stream))
+                            
+                            # 4. The Bouncer: Cross-Stream Check
+                            if expected_code and dept_code != expected_code:
+                                st.error(f"🚨 Hold up! Roll number {roll_clean} does not belong to the {st.session_state.stream} department.")
+                                st.warning("Redirecting you back to the Streams page...")
+                                
+                                time.sleep(2.5) # Pauses the app so they can actually read the error
+                                st.session_state.current_page = "stream"
+                                st.rerun() # Kicks them back!
+                                
+                            # 5. Success! Let them in.
+                            else:
+                                st.session_state.roll_number = roll_clean
+                                st.session_state.batch_year = batch_year # Saved for your Syllabus feature!
+                                st.session_state.current_page = "dashboard" 
+                                st.rerun()
+                                
+                        else:
+                            st.error("Invalid format. Roll number must start with 1606 and be exactly 12 digits.")
                     else:
                         st.error("Please enter both Roll Number and Password.")
 
