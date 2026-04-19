@@ -3,8 +3,7 @@ import streamlit as st
 import time # <-- ADD THIS!
 import ai_backend # <-- SURGICALLY ATTACHING THE BRAIN!
 import PyPDF2 # <-- Add this!
-# ── Page config (must be first Streamlit call) ──────────────────────────────
-st.set_page_config(layout="wide", initial_sidebar_state="expanded")
+# ── Page config (Only ONE call allowed, and it must be first!) ──
 st.set_page_config(
     page_title="Zenith · CSE Dashboard",
     page_icon="🌿",
@@ -264,7 +263,7 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 /* Hide Streamlit branding */
-#MainMenu, footer, header { visibility: hidden; }
+
 </style>
 """, unsafe_allow_html=True)
 
