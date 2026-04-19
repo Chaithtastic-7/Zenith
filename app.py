@@ -563,7 +563,12 @@ elif st.session_state.current_page == "dashboard":
             tool_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review:"
         elif selected_tool == "🔮 Question Predictor":
             tool_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers:"
-        
+        elif selected_tool == "📝 Chat with Notes":
+            if "pdf_memory" in st.session_state:
+                tool_prompt = f"Answer the user's question STRICTLY using the information in the provided course notes below. If the answer is not in the notes, say 'That isn't covered in the uploaded document.'\n\n--- COURSE NOTES ---\n{st.session_state.pdf_memory}\n--------------------\n"
+            else:
+                tool_prompt = "Politely tell the user that they need to upload a PDF document first before you can answer questions about their notes."
+
         final_prompt = f"{tutor_mode}\n\n{subject_lock}\n\n{tool_prompt}\n\nUser Input: {prompt}"
 
         # 3. Call your real AI backend
