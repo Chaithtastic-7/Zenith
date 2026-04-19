@@ -315,7 +315,7 @@ elif st.session_state.current_page == "stream":
         with [col1, col2, col3, col4][idx % 4]:
             if st.button(stream, use_container_width=True):
                 st.session_state.stream = stream
-                st.session_state.current_page = "login"
+                st.session_state.current_page = "exam_type"
                 st.rerun()
 
 # ==========================================
