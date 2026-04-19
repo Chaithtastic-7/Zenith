@@ -341,10 +341,6 @@ elif st.session_state.current_page == "login":
 # PAGE 4: THE ACTUAL ZENITH DASHBOARD
 # ==========================================
 elif st.session_state.current_page == "dashboard":
-    
-    # ---> 🚨 PASTE ALL OF YOUR CLAUDE DASHBOARD CODE HERE! <---
-    # From the TOOLS definition all the way down to the AI connection.
-    # Just make sure everything is indented one level to the right so it sits inside this 'elif' block!
 
     # ── Tool definitions (Descriptions Only) ──────────────────────────────────
     TOOLS = {
