@@ -345,147 +345,145 @@ elif st.session_state.current_page == "dashboard":
     # ---> 🚨 PASTE ALL OF YOUR CLAUDE DASHBOARD CODE HERE! <---
     # From the TOOLS definition all the way down to the AI connection.
     # Just make sure everything is indented one level to the right so it sits inside this 'elif' block!
-    
-    pass # Remove this 'pass' once you paste your code!
 
-# ── Tool definitions (Descriptions Only) ──────────────────────────────────
-TOOLS = {
-    "💬 General Chat": "Open-ended AI assistant for any CS topic.",
-    "📝 Chat with Notes": "Chat grounded in your uploaded study notes.",
-    "💻 Code Explainer": "Paste code and get a plain-English breakdown.",
-    "⚡ TL;DR Summarizer": "Condense long topics or articles instantly.",
-    "🔮 Question Predictor": "Predict likely exam questions from a topic.",
-}
+    # ── Tool definitions (Descriptions Only) ──────────────────────────────────
+    TOOLS = {
+        "💬 General Chat": "Open-ended AI assistant for any CS topic.",
+        "📝 Chat with Notes": "Chat grounded in your uploaded study notes.",
+        "💻 Code Explainer": "Paste code and get a plain-English breakdown.",
+        "⚡ TL;DR Summarizer": "Condense long topics or articles instantly.",
+        "🔮 Question Predictor": "Predict likely exam questions from a topic.",
+    }
 
-# ── Sidebar ──────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        "<h2 style='font-family:DM Serif Display,serif;font-size:1.4rem;"
-        "letter-spacing:-0.02em;margin-bottom:0.25rem;'>🛠️ Power Tools</h2>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        "<p style='font-size:0.78rem;color:#9E9690;margin-bottom:1.5rem;'>"
-        "Choose your study mode below</p>",
-        unsafe_allow_html=True,
-    )
+    # ── Sidebar ──────────────────────────────────────────────────────────────────
+    with st.sidebar:
+        st.markdown(
+            "<h2 style='font-family:DM Serif Display,serif;font-size:1.4rem;"
+            "letter-spacing:-0.02em;margin-bottom:0.25rem;'>🛠️ Power Tools</h2>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            "<p style='font-size:0.78rem;color:#9E9690;margin-bottom:1.5rem;'>"
+            "Choose your study mode below</p>",
+            unsafe_allow_html=True,
+        )
 
-    selected_tool = st.radio(
-        label="AI Mode",
-        options=list(TOOLS.keys()),
-        label_visibility="collapsed",
-    )
+        selected_tool = st.radio(
+            label="AI Mode",
+            options=list(TOOLS.keys()),
+            label_visibility="collapsed",
+        )
 
-    st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown(
-        f"<p style='font-size:0.77rem;color:#9E9690;line-height:1.6;'>"
-        f"<b style='color:#6B6560;'>Active mode</b><br>"
-        f"{TOOLS[selected_tool]}</p>",
-        unsafe_allow_html=True,
-    )
+        st.markdown("<hr>", unsafe_allow_html=True)
+        st.markdown(
+            f"<p style='font-size:0.77rem;color:#9E9690;line-height:1.6;'>"
+            f"<b style='color:#6B6560;'>Active mode</b><br>"
+            f"{TOOLS[selected_tool]}</p>",
+            unsafe_allow_html=True,
+        )
 
-    # Push to bottom
-    st.markdown("<br>" * 6, unsafe_allow_html=True)
-    st.caption("Logged in as: 4th Sem CSE Student")
+        # Push to bottom
+        st.markdown("<br>" * 6, unsafe_allow_html=True)
+        st.caption("Logged in as: 4th Sem CSE Student")
 
-# ── Session state ─────────────────────────────────────────────────────────────
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+    # ── Session state ─────────────────────────────────────────────────────────────
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-if "last_tool" not in st.session_state:
-    st.session_state.last_tool = None
+    if "last_tool" not in st.session_state:
+        st.session_state.last_tool = None
 
-# Clear chat if tool changes
-if st.session_state.last_tool != selected_tool:
-    st.session_state.messages = []
-    st.session_state.last_tool = selected_tool
+    # Clear chat if tool changes
+    if st.session_state.last_tool != selected_tool:
+        st.session_state.messages = []
+        st.session_state.last_tool = selected_tool
 
-# ── Main area header ──────────────────────────────────────────────────────────
-st.markdown(
-    f"""
-    <div class="main-header">
-        <div>
-            <div class="title">Zenith ✦</div>
-            <div class="subtitle">Computer Science Engineering Dashboard</div>
-        </div>
-        <div class="mode-pill">{selected_tool}</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# ── Welcome card (shown only when chat is empty) ──────────────────────────────
-if not st.session_state.messages:
-    tool_chips_html = "".join(
-        f'<span class="tool-chip">{t}</span>' for t in TOOLS
-    )
+    # ── Main area header ──────────────────────────────────────────────────────────
     st.markdown(
         f"""
-        <div class="welcome-card">
-            <h2>Good to see you 🌿</h2>
-            <p>
-                You're in <strong>{selected_tool}</strong> mode —
-                {TOOLS[selected_tool]}<br><br>
-                Type a question below to get started. Switch modes anytime
-                from the sidebar to change how I respond.
-            </p>
-            <div class="tool-chips">{tool_chips_html}</div>
+        <div class="main-header">
+            <div>
+                <div class="title">Zenith ✦</div>
+                <div class="subtitle">Computer Science Engineering Dashboard</div>
+            </div>
+            <div class="mode-pill">{selected_tool}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-# ── Render chat history ───────────────────────────────────────────────────────
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"], avatar=msg["avatar"]):
-        st.markdown(msg["content"])
+    # ── Welcome card (shown only when chat is empty) ──────────────────────────────
+    if not st.session_state.messages:
+        tool_chips_html = "".join(
+            f'<span class="tool-chip">{t}</span>' for t in TOOLS
+        )
+        st.markdown(
+            f"""
+            <div class="welcome-card">
+                <h2>Good to see you 🌿</h2>
+                <p>
+                    You're in <strong>{selected_tool}</strong> mode —
+                    {TOOLS[selected_tool]}<br><br>
+                    Type a question below to get started. Switch modes anytime
+                    from the sidebar to change how I respond.
+                </p>
+                <div class="tool-chips">{tool_chips_html}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-# ── Chat input & REAL AI CONNECTION ───────────────────────────────────────────
-placeholder_map = {
-    "💬 General Chat":       "Ask me anything about CS…",
-    "📝 Chat with Notes":    "Ask a question based on your notes…",
-    "💻 Code Explainer":     "Paste your code here…",
-    "⚡ TL;DR Summarizer":   "Paste a topic or paragraph to summarise…",
-    "🔮 Question Predictor": "Enter a chapter or topic name…",
-}
+    # ── Render chat history ───────────────────────────────────────────────────────
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"], avatar=msg["avatar"]):
+            st.markdown(msg["content"])
 
-if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here…")):
+    # ── Chat input & REAL AI CONNECTION ───────────────────────────────────────────
+    placeholder_map = {
+        "💬 General Chat":       "Ask me anything about CS…",
+        "📝 Chat with Notes":    "Ask a question based on your notes…",
+        "💻 Code Explainer":     "Paste your code here…",
+        "⚡ TL;DR Summarizer":   "Paste a topic or paragraph to summarise…",
+        "🔮 Question Predictor": "Enter a chapter or topic name…",
+    }
 
-    # 1. Store & show user message
-    st.session_state.messages.append({
-        "role":    "user",
-        "avatar":  "🧑‍💻",
-        "content": prompt,
-    })
-    with st.chat_message("user", avatar="🧑‍💻"):
-        st.markdown(prompt)
+    if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here…")):
 
-    # 2. Inject the secret prompt engineering!
-    hidden_prompt = ""
-    if selected_tool == "💻 Code Explainer":
-        hidden_prompt = "You are an expert CSE professor. Explain this code simply, and do a step-by-step dry run: \n\n"
-    elif selected_tool == "⚡ TL;DR Summarizer":
-        hidden_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review: \n\n"
-    elif selected_tool == "🔮 Question Predictor":
-        hidden_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers: \n\n"
-    
-    final_prompt = hidden_prompt + prompt
+        # 1. Store & show user message
+        st.session_state.messages.append({
+            "role":    "user",
+            "avatar":  "🧑‍💻",
+            "content": prompt,
+        })
+        with st.chat_message("user", avatar="🧑‍💻"):
+            st.markdown(prompt)
 
-    # 3. Call your real AI backend
-    with st.chat_message("assistant", avatar="🌿"):
-        with st.spinner("Zenith is thinking..."):
-            try:
-                # Talking to Google Servers!
-                response_text = ai_backend.get_ai_response(final_prompt)
-                response_text = str(response_text) # This fixes the Pylance warning!
-                st.markdown(response_text)
-            except Exception as e:
-                response_text = "Oops! The AI needs a second. Try asking again."
-                st.error(response_text)
+        # 2. Inject the secret prompt engineering!
+        hidden_prompt = ""
+        if selected_tool == "💻 Code Explainer":
+            hidden_prompt = "You are an expert CSE professor. Explain this code simply, and do a step-by-step dry run: \n\n"
+        elif selected_tool == "⚡ TL;DR Summarizer":
+            hidden_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review: \n\n"
+        elif selected_tool == "🔮 Question Predictor":
+            hidden_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers: \n\n"
+        
+        final_prompt = hidden_prompt + prompt
 
-    # 4. Store assistant message
-    st.session_state.messages.append({
-        "role":    "assistant",
-        "avatar":  "🌿",
-        "content": response_text,
-    })
+        # 3. Call your real AI backend
+        with st.chat_message("assistant", avatar="🌿"):
+            with st.spinner("Zenith is thinking..."):
+                try:
+                    # Talking to Google Servers!
+                    response_text = ai_backend.get_ai_response(final_prompt)
+                    response_text = str(response_text) # This fixes the Pylance warning!
+                    st.markdown(response_text)
+                except Exception as e:
+                    response_text = "Oops! The AI needs a second. Try asking again."
+                    st.error(response_text)
+
+        # 4. Store assistant message
+        st.session_state.messages.append({
+            "role":    "assistant",
+            "avatar":  "🌿",
+            "content": response_text,
+        })
