@@ -328,7 +328,7 @@ elif st.session_state.current_page == "login":
     with col2:
         with st.container(border=True):
             with st.form("login_form"):
-                roll_input = st.text_input("College Roll Number (e.g., 160625733128)")
+                roll_input = st.text_input("College Roll Number")
                 password_input = st.text_input("Password", type="password")
                 
                 submitted = st.form_submit_button("Access Dashboard ✨", use_container_width=True)
