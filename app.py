@@ -1,7 +1,7 @@
 import streamlit as st
 import time # <-- ADD THIS!
 import ai_backend # <-- SURGICALLY ATTACHING THE BRAIN!
-
+import PyPDF2 # <-- Add this!
 # ── Page config (must be first Streamlit call) ──────────────────────────────
 st.set_page_config(
     page_title="Zenith · CSE Dashboard",
@@ -518,27 +518,34 @@ elif st.session_state.current_page == "dashboard":
         "🔮 Question Predictor": "Enter a chapter or topic name…",
     }
 
-    if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here…")):
+    if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here...")):
 
         # 1. Store & show user message
         st.session_state.messages.append({
-            "role":    "user",
-            "avatar":  "🧑‍💻",
+            "role": "user",
+            "avatar": "🧑‍💻",
             "content": prompt,
         })
         with st.chat_message("user", avatar="🧑‍💻"):
             st.markdown(prompt)
 
         # 2. Inject the secret prompt engineering!
-        hidden_prompt = ""
-        if selected_tool == "💻 Code Explainer":
-            hidden_prompt = "You are an expert CSE professor. Explain this code simply, and do a step-by-step dry run: \n\n"
-        elif selected_tool == "⚡ TL;DR Summarizer":
-            hidden_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review: \n\n"
-        elif selected_tool == "🔮 Question Predictor":
-            hidden_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers: \n\n"
+        if st.session_state.exam_type == "Supply":
+            tutor_mode = "You are a highly strategic tutor helping a student pass a backlog/supply exam. Focus ONLY on high-yield topics, critical previous questions, and the easiest ways to secure passing marks. Be encouraging but strictly focused on passing."
+        else:
+            tutor_mode = "You are an expert college professor. Focus on deep conceptual understanding, comprehensive explanations, and mastery of the topic."
+
+        subject_lock = f"You must strictly limit your answers to the subject of {st.session_state.subject}. If the user asks about anything else, politely decline and steer them back to {st.session_state.subject}."
         
-        final_prompt = hidden_prompt + prompt
+        tool_prompt = ""
+        if selected_tool == "💻 Code Explainer":
+            tool_prompt = "Explain this code simply, and do a step-by-step dry run:"
+        elif selected_tool == "⚡ TL;DR Summarizer":
+            tool_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review:"
+        elif selected_tool == "🔮 Question Predictor":
+            tool_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers:"
+        
+        final_prompt = f"{tutor_mode}\n\n{subject_lock}\n\n{tool_prompt}\n\nUser Input: {prompt}"
 
         # 3. Call your real AI backend
         with st.chat_message("assistant", avatar="🌿"):
@@ -554,7 +561,7 @@ elif st.session_state.current_page == "dashboard":
 
         # 4. Store assistant message
         st.session_state.messages.append({
-            "role":    "assistant",
-            "avatar":  "🌿",
+            "role": "assistant",
+            "avatar": "🌿",
             "content": response_text,
         })
