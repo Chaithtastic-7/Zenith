@@ -4,6 +4,7 @@ import time # <-- ADD THIS!
 import ai_backend # <-- SURGICALLY ATTACHING THE BRAIN!
 import PyPDF2 # <-- Add this!
 # ── Page config (must be first Streamlit call) ──────────────────────────────
+st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 st.set_page_config(
     page_title="Zenith · CSE Dashboard",
     page_icon="🌿",
