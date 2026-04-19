@@ -319,6 +319,39 @@ elif st.session_state.current_page == "stream":
                 st.rerun()
 
 # ==========================================
+# PAGE 2.5: EXAM TYPE SELECTION
+# ==========================================
+elif st.session_state.current_page == "exam_type":
+    st.markdown("<h2 style='text-align: center;'>What are we studying for?</h2>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("📚 Regular Semester", use_container_width=True):
+            st.session_state.exam_type = "Regular"
+            st.session_state.current_page = "subject"
+            st.rerun()
+    with col2:
+        if st.button("🚨 Supply / Backlog", use_container_width=True):
+            st.session_state.exam_type = "Supply"
+            st.session_state.current_page = "subject"
+            st.rerun()
+
+# ==========================================
+# PAGE 2.6: SUBJECT SELECTION
+# ==========================================
+elif st.session_state.current_page == "subject":
+    st.markdown(f"<h2 style='text-align: center;'>Select your {st.session_state.stream} Subject</h2>", unsafe_allow_html=True)
+    
+    # We will eventually pull these from a database, but for now, we hardcode a few!
+    subjects = ["Data Structures", "Computer Networks", "Operating Systems", "Database Management"]
+    
+    for sub in subjects:
+        if st.button(sub, use_container_width=True):
+            st.session_state.subject = sub
+            st.session_state.current_page = "login" # NOW they go to login!
+            st.rerun()
+
+# ==========================================
 # PAGE 3: STUDENT LOGIN & VALIDATION
 # ==========================================
 elif st.session_state.current_page == "login":
