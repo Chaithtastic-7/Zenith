@@ -519,24 +519,40 @@ elif st.session_state.current_page == "dashboard":
         "🔮 Question Predictor": "Enter a chapter or topic name…",
     }
     # ==========================================
-    # PDF UPLOAD ZONE (Only shows for "Chat with Notes")
+    # DATABASE FETCH ZONE (The 10-Mark Special)
     # ==========================================
     if selected_tool == "📝 Chat with Notes":
-        st.markdown("### 📚 Document Scanner")
-        uploaded_file = st.file_uploader("Upload your Syllabus or Class Notes (PDF)", type=["pdf"])
+        st.markdown("### 📚 Accessing University Database...")
         
-        if uploaded_file is not None:
-            with st.spinner("Zenith is reading your document..."):
-                # Read the PDF and extract the text
-                pdf_reader = PyPDF2.PdfReader(uploaded_file)
-                extracted_text = ""
-                for page in pdf_reader.pages:
-                    if page.extract_text():
-                        extracted_text += page.extract_text()
-                
-                # Save the text into Zenith's memory!
-                st.session_state.pdf_memory = extracted_text
-                st.success("Document memorized! Ask me anything about it.")
+        try:
+            # 1. Connect to your local MySQL
+            mydb = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="Zenith@123", 
+                database="zenith"
+            )
+            mycursor = mydb.cursor()
+
+            # 2. Fetch notes based on current session choices
+            query = "SELECT notes_text FROM course_notes WHERE semester = %s AND stream = %s AND subject = %s"
+            values = (st.session_state.semester, st.session_state.stream, st.session_state.subject)
+            
+            mycursor.execute(query, values)
+            result = mycursor.fetchone()
+
+            if result:
+                st.session_state.db_memory = str(result[0]) # pyright: ignore[reportArgumentType]
+                st.success(f"✅ Official {st.session_state.subject} notes synced from MySQL!")
+            else:
+                st.warning(f"⚠️ No notes found in DB for {st.session_state.subject}.")
+                st.session_state.db_memory = None
+            
+            mycursor.close()
+            mydb.close()
+
+        except Exception as e:
+            st.error(f"❌ Database Error: {e}")
 
     if prompt := st.chat_input(placeholder_map.get(selected_tool, "Type here...")):
 
@@ -565,10 +581,11 @@ elif st.session_state.current_page == "dashboard":
         elif selected_tool == "🔮 Question Predictor":
             tool_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers:"
         elif selected_tool == "📝 Chat with Notes":
-            if "pdf_memory" in st.session_state:
-                tool_prompt = f"Answer the user's question STRICTLY using the information in the provided course notes below. If the answer is not in the notes, say 'That isn't covered in the uploaded document.'\n\n--- COURSE NOTES ---\n{st.session_state.pdf_memory}\n--------------------\n"
-            else:
-                tool_prompt = "Politely tell the user that they need to upload a PDF document first before you can answer questions about their notes."
+        # Check if the database fetch actually worked
+         if "db_memory" in st.session_state and st.session_state.db_memory:
+            tool_prompt = f"You are an expert tutor. Answer the user's question ONLY using the following official notes from the university database:\n\n{st.session_state.db_memory}\n"
+        else:
+            tool_prompt = "Tell the user that no official notes for this subject were found in the database. They should contact their department."
 
         final_prompt = f"{tutor_mode}\n\n{subject_lock}\n\n{tool_prompt}\n\nUser Input: {prompt}"
 
