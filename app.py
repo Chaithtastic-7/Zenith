@@ -1,3 +1,4 @@
+import mysql.connector
 import streamlit as st
 import time # <-- ADD THIS!
 import ai_backend # <-- SURGICALLY ATTACHING THE BRAIN!
