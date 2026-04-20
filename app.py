@@ -532,7 +532,7 @@ elif st.session_state.current_page == "dashboard":
                 password="zenith@123", 
                 database="zenith"
             )
-            mycursor = mydb.cursor()
+            mycursor = mydb.cursor(buffered=True)
 
             # 2. Fetch notes based on current session choices
             query = "SELECT notes_text FROM course_notes WHERE semester = %s AND stream = %s AND subject = %s"
