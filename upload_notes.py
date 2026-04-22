@@ -29,7 +29,7 @@ def process_handwritten_pdf(pdf_path, semester, stream, subject):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="YourPasswordHere", # <-- Update this
+            password="zenith@123", # <-- Update this
             database="zenith"
         )
         mycursor = mydb.cursor()
