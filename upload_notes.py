@@ -7,7 +7,7 @@ def process_handwritten_pdf(pdf_path, semester, stream, subject):
     print(f"⚙️ Extracting handwritten notes for {subject}...")
     
     # 1. Slice the PDF into individual image files
-    pages = convert_from_path(pdf_path)
+    pages = convert_from_path(pdf_path, poppler_path='/opt/homebrew/bin')
     full_transcription = ""
 
     for i, page in enumerate(pages):
