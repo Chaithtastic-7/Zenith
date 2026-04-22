@@ -1,3 +1,21 @@
+import google.generativeai as genai
+import PIL.Image 
+
+def read_image_with_ai(image_path, prompt):
+    """Uses Gemini Vision to read handwritten text from an image."""
+    try:
+        # 1. Open the image file
+        img = PIL.Image.open(image_path)
+        
+        # 2. Load the vision-capable model (gemini-1.5-flash is great for this)
+        model = genai.GenerativeModel('gemini-1.5-flash')  # pyright: ignore[reportAttributeAccessIssue, reportPrivateImportUsage]
+        
+        # 3. Send the image and the prompt to the AI
+        response = model.generate_content([prompt, img])
+        
+        return response.text
+    except Exception as e:
+        return f"Error reading image: {e}"
 import warnings
 warnings.filterwarnings("ignore")
 

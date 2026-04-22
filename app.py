@@ -577,7 +577,12 @@ elif st.session_state.current_page == "dashboard":
         if selected_tool == "💻 Code Explainer":
             tool_prompt = "Explain this code simply, and do a step-by-step dry run:"
         elif selected_tool == "⚡ TL;DR Summarizer":
-            tool_prompt = "Extract ONLY the most critical definitions, formulas, and bullet points from this text for a quick exam review:"
+            tool_prompt = """
+            1. Extract the most critical definitions, formulas, and bullet points from the provided text for a quick exam review.
+            2. Below your summary, generate a visual "Mind Map" of the syllabus/topics covered in the text. 
+               Represent this mind map using a strict hierarchical Markdown list (using -, *, and indentation) 
+               so the user can clearly see how the core concepts branch out into sub-topics.
+            """
         elif selected_tool == "🔮 Question Predictor":
             tool_prompt = "Based on this text, predict the top 5 most likely exam questions and provide short answers:"
         elif selected_tool == "📝 Chat with Notes":
