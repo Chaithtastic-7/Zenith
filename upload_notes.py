@@ -20,7 +20,7 @@ def process_handwritten_pdf(pdf_path, semester, stream, subject):
         
         print(f"   Reading page {i+1}...")
         page_text = ai_backend.read_image_with_ai(temp_img_path, prompt) 
-        full_transcription += page_text + "\n\n"
+        full_transcription += str(page_text) + "\n\n"
         
         os.remove(temp_img_path) # Clean up the temp image
 
