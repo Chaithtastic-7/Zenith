@@ -44,6 +44,6 @@ def process_handwritten_pdf(pdf_path, semester, stream, subject):
         print(f"❌ Database Error: {e}")
 
 # Run the pipeline for your subjects!
-# process_handwritten_pdf("OS_Unit1_Handwritten.pdf", 4, "CSE", "Operating Systems")
+process_handwritten_pdf("Unit 1.pdf", 4, "CSE", "Operating Systems")
 # process_handwritten_pdf("DBMS_Notes.pdf", 4, "CSE", "Database Management Systems")
 # process_handwritten_pdf("TOC_Notes.pdf", 4, "CSE", "Theory of Computation")
