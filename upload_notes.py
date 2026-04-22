@@ -2,6 +2,7 @@ import mysql.connector
 from pdf2image import convert_from_path
 import ai_backend # Using your existing Gemini connection
 import os
+import time # <--- ADD THIS LINE
 
 def process_handwritten_pdf(pdf_path, semester, stream, subject):
     print(f"⚙️ Extracting handwritten notes for {subject}...")
