@@ -603,6 +603,7 @@ elif st.session_state.current_page == "dashboard":
                     response_text = str(response_text) # This fixes the Pylance warning!
                     st.markdown(response_text)
                 except Exception as e:
+                    print(f"🔥 THE REAL ERROR: {e}") 
                     response_text = "Oops! The AI needs a second. Try asking again."
                     st.error(response_text)
 
