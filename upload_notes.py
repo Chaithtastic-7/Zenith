@@ -25,8 +25,8 @@ def process_handwritten_pdf(pdf_path, semester, stream, subject):
         
         os.remove(temp_img_path) # Clean up the temp image
 
-        print("   Pausing for 15 seconds to respect API limits...") 
-        time.sleep(15)
+        print("   Pausing for  seconds to respect API limits...") 
+        time.sleep(5)
 
     # 3. Inject the clean text into MySQL
     try:
